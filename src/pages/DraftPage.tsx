@@ -54,14 +54,14 @@ const DraftPage: FC = () => {
             <label className="draft__media" htmlFor="draftImage">
               <img className="draft__preview" src={imagePreview} alt="Фото балки" />
             </label>
-            <Form.Control className="draft__file" type="file" accept="image/*" onChange={handleImage} />
+            <Form.Control hidden type="file" accept="image/*" onChange={handleImage} />
           </Form.Group>
           <Form.Group className="draft__field" controlId="draftVideo">
             <Form.Label className="draft__label">Видео</Form.Label>
             <label className="draft__media" htmlFor="draftVideo">
               <video key={videoPreview} className="draft__preview" src={videoPreview} autoPlay muted loop playsInline />
             </label>
-            <Form.Control className="draft__file" type="file" accept="video/*" onChange={handleVideo} />
+            <Form.Control hidden type="file" accept="video/*" onChange={handleVideo} />
           </Form.Group>
         </div>
 

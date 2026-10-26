@@ -43,10 +43,6 @@
     object-fit: cover;
 }
 
-.draft .draft__file {
-    font-size: 12px;
-}
-
 .draft .draft__input {
     min-height: var(--control-height);
     padding: 0 12px;
