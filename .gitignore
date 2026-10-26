@@ -1,4 +1,15 @@
 .DS_Store
+.idea/
+.vscode/
+
 node_modules/
 dist/
+dist-ssr/
+*.tsbuildinfo
+*.local
+
 .env
+.env.*
+
+*.log
+npm-debug.log*
