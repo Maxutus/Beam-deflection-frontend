@@ -1,0 +1,30 @@
+.inputField {
+    display: flex;
+    gap: 8px;
+    padding: 16px 16px 0;
+}
+
+.inputField .inputField__input {
+    flex: 1;
+    min-width: 0;
+    height: var(--control-height);
+    padding: 0 12px;
+    border: 1px solid var(--lm-border);
+    border-radius: var(--tile-radius);
+    font-size: 16px;
+    color: var(--lm-dark);
+}
+
+.inputField .inputField__input::placeholder {
+    color: var(--lm-dim);
+}
+
+.inputField .inputField__input:focus {
+    border-color: var(--lm-dark);
+    box-shadow: none;
+}
+
+.inputField__button {
+    height: var(--control-height);
+    padding: 0 24px;
+}

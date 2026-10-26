@@ -1,0 +1,13 @@
+.tiles__count {
+    display: block;
+    padding: 10px 16px 0;
+    font-size: 13px;
+    color: var(--lm-dim);
+}
+
+.tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 12px;
+    padding: 16px;
+}

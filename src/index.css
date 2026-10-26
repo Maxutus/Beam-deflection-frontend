@@ -1,0 +1,125 @@
+:root {
+    --lm-accent: #FDC300;
+    --lm-accent-hover: #E5B000;
+    --lm-dark: #334043;
+    --lm-surface: #FFFFFF;
+    --lm-background: #F4F3EF;
+    --lm-panel: #E3E1D8;
+    --lm-border: #C4CBCB;
+    --lm-divider: #E3E1D8;
+    --lm-muted: #6E7A7C;
+    --lm-dim: #8A9294;
+    --lm-alert: #C61112;
+
+    --tile-radius: 4px;
+    --control-height: 48px;
+    --tabbar-height: 72px;
+}
+
+html,
+body {
+    background: #dfe0dc;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    color: var(--lm-dark);
+    font-family: Roboto, system-ui, -apple-system, sans-serif;
+}
+
+#root {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.phone {
+    position: relative;
+    width: min(390px, 100vw);
+    height: min(100dvh, 844px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--lm-background);
+}
+
+.phone__content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 16px 8px;
+}
+
+.page-header__title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.lm-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: var(--tile-radius);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+}
+
+.lm-badge--accent {
+    background: var(--lm-accent);
+    color: var(--lm-dark);
+}
+
+.lm-badge--light {
+    background: var(--lm-surface);
+    color: var(--lm-dark);
+}
+
+.lm-button {
+    --bs-btn-padding-x: 24px;
+    --bs-btn-font-size: 16px;
+    --bs-btn-font-weight: 700;
+    --bs-btn-color: var(--lm-dark);
+    --bs-btn-bg: var(--lm-accent);
+    --bs-btn-border-color: transparent;
+    --bs-btn-hover-color: var(--lm-dark);
+    --bs-btn-hover-bg: var(--lm-accent-hover);
+    --bs-btn-hover-border-color: transparent;
+    --bs-btn-active-color: var(--lm-dark);
+    --bs-btn-active-bg: var(--lm-accent-hover);
+    --bs-btn-active-border-color: transparent;
+    --bs-btn-disabled-color: var(--lm-dark);
+    --bs-btn-disabled-bg: var(--lm-panel);
+    --bs-btn-disabled-border-color: transparent;
+    --bs-btn-border-radius: var(--tile-radius);
+    --bs-btn-focus-box-shadow: 0 0 0 2px var(--lm-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--control-height);
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 48px 16px;
+    text-align: center;
+    color: var(--lm-muted);
+}
+
+.message__title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--lm-dark);
+}
