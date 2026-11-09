@@ -1,67 +1,58 @@
 import './TilesPage.css'
-import { type FC, useEffect, useState } from 'react'
+import { type FC, useEffect } from 'react'
+import { Alert } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../Routes'
-import type { Beam } from '../modules/beamsApi'
+import type { AppDispatch, RootState } from '../store'
+import { deleteBeam, getBeamsList } from '../slices/beamsSlice'
 import { InputField } from '../components/InputField'
 import { BeamCard } from '../components/BeamCard'
+import { Loader } from '../components/Loader'
 
-interface Props {
-  beams: Beam[]
-}
-
-const TilesPage: FC<Props> = ({ beams }) => {
+const TilesPage: FC = () => {
   const navigate = useNavigate()
-  const [searchValue, setSearchValue] = useState('')
-  const [visibleBeams, setVisibleBeams] = useState<Beam[]>(beams)
-
-  useEffect(() => {
-    setVisibleBeams(beams)
-  }, [beams])
+  const dispatch = useDispatch<AppDispatch>()
+  const { searchValue, beams, loading, error } = useSelector((state: RootState) => state.beams)
+  const { login, isAuthenticated } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
     document.title = 'Балки'
-  }, [])
-
-  const handleSearch = () => {
-    const text = searchValue.trim().replace(',', '.')
-    const maxDeflection = Number(text)
-
-    if (text === '' || Number.isNaN(maxDeflection)) {
-      setVisibleBeams(beams)
-      return
-    }
-
-    setVisibleBeams(beams.filter((beam) => beam.deflection <= maxDeflection))
-  }
+    dispatch(getBeamsList())
+  }, [dispatch])
 
   return (
     <>
       <header className="page-header">
         <h1 className="page-header__title">Балки</h1>
+        {isAuthenticated && <span className="lm-badge lm-badge--accent page-header__login">{login}</span>}
       </header>
 
-      <InputField
-        value={searchValue}
-        setValue={setSearchValue}
-        onSubmit={handleSearch}
-        placeholder="Прогиб до, мм"
-      />
+      <InputField value={searchValue} loading={loading} />
 
-      <span className="tiles__count">Найдено балок: {visibleBeams.length}</span>
+      <span className="tiles__count">Найдено балок: {beams.length}</span>
 
-      {visibleBeams.length === 0 ? (
+      {error && <Alert variant="danger" className="tiles__error">{error}</Alert>}
+
+      {beams.length === 0 ? (
         <div className="message">
           <h2 className="message__title">Балок не найдено</h2>
           <span>Попробуйте увеличить допустимый прогиб</span>
         </div>
       ) : (
         <section className="tiles">
-          {visibleBeams.map((beam) => (
-            <BeamCard key={beam.id} {...beam} onClick={() => navigate(`${ROUTES.FEED}/${beam.id}`)} />
+          {beams.map((beam) => (
+            <BeamCard
+              key={beam.id}
+              {...beam}
+              onClick={() => navigate(`${ROUTES.FEED}/${beam.id}`)}
+              onDelete={isAuthenticated && beam.is_mine ? () => dispatch(deleteBeam(beam.id)) : undefined}
+            />
           ))}
         </section>
       )}
+
+      {loading && <Loader />}
     </>
   )
 }

@@ -129,7 +129,19 @@
 }
 
 .feed__side-button--like {
+    background: var(--lm-surface);
+    color: var(--lm-dim);
+    cursor: pointer;
+}
+
+.feed__side-button--liked {
     background: var(--lm-accent);
+    color: var(--lm-dark);
+}
+
+.feed__side-button:disabled {
+    cursor: default;
+    opacity: 0.85;
 }
 
 .feed__side-button--next {

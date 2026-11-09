@@ -1,27 +1,24 @@
-import { useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ROUTES } from './Routes'
-import type { Beam } from './modules/beamsApi'
-import { BEAMS_MOCK } from './modules/mock'
 import { TabBar } from './components/TabBar'
 import TilesPage from './pages/TilesPage'
 import FeedPage from './pages/FeedPage'
 import DraftPage from './pages/DraftPage'
+import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 function App() {
-  const [beams] = useState<Beam[]>(BEAMS_MOCK)
-
   return (
     <BrowserRouter>
       <div className="phone">
         <main className="phone__content">
           <Routes>
-            <Route path="/" element={<Navigate to={ROUTES.TILES} replace />} />
-            <Route path={ROUTES.TILES} element={<TilesPage beams={beams} />} />
-            <Route path={ROUTES.FEED} element={<FeedPage beams={beams} />} />
-            <Route path={`${ROUTES.FEED}/:id`} element={<FeedPage beams={beams} />} />
+            <Route path="/" element={<Navigate to={ROUTES.FEED} replace />} />
+            <Route path={ROUTES.TILES} element={<TilesPage />} />
+            <Route path={ROUTES.FEED} element={<FeedPage />} />
+            <Route path={`${ROUTES.FEED}/:id`} element={<FeedPage />} />
             <Route path={ROUTES.DRAFT} element={<DraftPage />} />
+            <Route path={ROUTES.LOGIN} element={<LoginPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>

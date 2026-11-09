@@ -11,3 +11,7 @@
     gap: 16px 12px;
     padding: 16px;
 }
+
+.tiles__error {
+    margin: 10px 16px 0;
+}

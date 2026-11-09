@@ -1,15 +1,38 @@
 import './TabBar.css'
 import type { FC } from 'react'
 import { Nav, Navbar } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { ROUTES, ROUTE_LABELS } from '../Routes'
+import axios from 'axios'
+import { LOGOUT_LABEL, ROUTES, ROUTE_LABELS } from '../Routes'
+import { api } from '../api'
+import type { AppDispatch, RootState } from '../store'
+import { resetUser } from '../slices/userSlice'
+import { getBeamsList, setSearchValue } from '../slices/beamsSlice'
 
 export const TabBar: FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const dispatch = useDispatch<AppDispatch>()
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated)
 
   const isFeed = location.pathname.startsWith(ROUTES.FEED)
   const isTiles = location.pathname === ROUTES.TILES
+  const isDraft = location.pathname === ROUTES.DRAFT
+  const isLogin = location.pathname === ROUTES.LOGIN
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem('token')
+    await axios
+      .post('/api/users/logout', null, { headers: { Authorization: `Bearer ${token}` } })
+      .catch(() => undefined)
+    localStorage.removeItem('token')
+    api.setSecurityData(null)
+    dispatch(resetUser())
+    dispatch(setSearchValue(''))
+    navigate(ROUTES.TILES)
+    dispatch(getBeamsList())
+  }
 
   return (
     <Navbar expand className="tabbar">
@@ -20,7 +43,13 @@ export const TabBar: FC = () => {
           </svg>
           <span>{ROUTE_LABELS.FEED}</span>
         </Nav.Link>
-        <Nav.Link as="button" className="tabbar__item" disabled>
+        <Nav.Link
+          as="button"
+          className="tabbar__item"
+          active={isDraft}
+          disabled={!isAuthenticated}
+          onClick={() => navigate(ROUTES.DRAFT)}
+        >
           <svg className="tabbar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <line x1="12" y1="5" x2="12" y2="19" />
             <line x1="5" y1="12" x2="19" y2="12" />
@@ -36,13 +65,18 @@ export const TabBar: FC = () => {
           </svg>
           <span>{ROUTE_LABELS.TILES}</span>
         </Nav.Link>
-        <Nav.Link as="button" className="tabbar__item" disabled>
+        <Nav.Link
+          as="button"
+          className="tabbar__item"
+          active={isLogin}
+          onClick={isAuthenticated ? handleLogout : () => navigate(ROUTES.LOGIN)}
+        >
           <svg className="tabbar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M14 4h5v16h-5" />
             <path d="M4 12h11" />
             <path d="M11 8l4 4-4 4" />
           </svg>
-          <span>{ROUTE_LABELS.LOGIN}</span>
+          <span>{isAuthenticated ? LOGOUT_LABEL : ROUTE_LABELS.LOGIN}</span>
         </Nav.Link>
       </Nav>
     </Navbar>

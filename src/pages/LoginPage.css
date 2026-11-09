@@ -1,0 +1,35 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 8px 16px 16px;
+}
+
+.login__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.login .login__label {
+    margin: 0;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--lm-muted);
+}
+
+.login .login__input {
+    min-height: var(--control-height);
+    padding: 0 12px;
+    border: 1px solid var(--lm-border);
+    border-radius: var(--tile-radius);
+    font-size: 16px;
+    color: var(--lm-dark);
+}
+
+.login .login__input:focus {
+    border-color: var(--lm-dark);
+    box-shadow: none;
+}

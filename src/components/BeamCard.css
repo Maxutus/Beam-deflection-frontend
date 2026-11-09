@@ -15,6 +15,7 @@
 }
 
 .tile__thumb {
+    position: relative;
     flex: none;
     height: 150px;
     overflow: hidden;
@@ -75,4 +76,41 @@
     font-size: 13px;
     font-weight: 700;
     color: var(--lm-muted);
+}
+
+.tile .tile__delete {
+    --bs-btn-padding-x: 0;
+    --bs-btn-padding-y: 0;
+    --bs-btn-bg: rgba(255, 255, 255, 0.92);
+    --bs-btn-color: var(--lm-dark);
+    --bs-btn-border-color: transparent;
+    --bs-btn-hover-bg: var(--lm-alert);
+    --bs-btn-hover-color: var(--lm-surface);
+    --bs-btn-hover-border-color: transparent;
+    --bs-btn-active-bg: var(--lm-alert);
+    --bs-btn-active-color: var(--lm-surface);
+    --bs-btn-border-radius: var(--tile-radius);
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.tile__delete svg {
+    width: 18px;
+    height: 18px;
+}
+
+.tile__heart {
+    fill: var(--lm-panel);
+    stroke: var(--lm-dim);
+}
+
+.tile__likes--liked .tile__heart {
+    fill: var(--lm-accent);
+    stroke: var(--lm-dark);
 }

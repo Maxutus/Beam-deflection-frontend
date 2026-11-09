@@ -1,34 +1,38 @@
 import './InputField.css'
 import type { FC } from 'react'
 import { Button, Form } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
+import type { AppDispatch } from '../store'
+import { getBeamsList, setSearchValue } from '../slices/beamsSlice'
 
 interface Props {
   value: string
-  setValue: (value: string) => void
-  onSubmit: () => void
-  placeholder?: string
-  buttonTitle?: string
+  loading?: boolean
 }
 
-export const InputField: FC<Props> = ({ value, setValue, onSubmit, placeholder, buttonTitle = 'Найти' }) => (
-  <Form
-    className="inputField"
-    onSubmit={(event) => {
-      event.preventDefault()
-      onSubmit()
-    }}
-  >
-    <Form.Control
-      className="inputField__input"
-      inputMode="decimal"
-      value={value}
-      placeholder={placeholder}
-      onChange={(event) => setValue(event.target.value)}
-    />
-    <Button className="lm-button inputField__button" type="submit">
-      {buttonTitle}
-    </Button>
-  </Form>
-)
+export const InputField: FC<Props> = ({ value, loading }) => {
+  const dispatch = useDispatch<AppDispatch>()
+
+  return (
+    <Form
+      className="inputField"
+      onSubmit={(event) => {
+        event.preventDefault()
+        dispatch(getBeamsList())
+      }}
+    >
+      <Form.Control
+        className="inputField__input"
+        inputMode="decimal"
+        value={value}
+        placeholder="Прогиб до, мм"
+        onChange={(event) => dispatch(setSearchValue(event.target.value))}
+      />
+      <Button className="lm-button inputField__button" type="submit" disabled={loading}>
+        Найти
+      </Button>
+    </Form>
+  )
+}
 
 export default InputField

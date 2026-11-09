@@ -40,6 +40,10 @@
     display: block;
     width: 100%;
     height: 100%;
+    object-fit: fill;
+}
+
+video.draft__preview {
     object-fit: cover;
 }
 
@@ -67,4 +71,8 @@
     padding: 12px;
     line-height: 22px;
     resize: none;
+}
+
+.draft__error {
+    margin: 8px 16px 0;
 }

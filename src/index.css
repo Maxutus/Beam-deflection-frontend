@@ -64,6 +64,13 @@ body {
     font-weight: 700;
 }
 
+.page-header__login {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .lm-badge {
     display: inline-block;
     padding: 4px 8px;
