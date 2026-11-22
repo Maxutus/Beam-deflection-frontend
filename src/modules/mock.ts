@@ -7,7 +7,7 @@ export const BEAMS_MOCK: Beam[] = [
     name: 'Двутавр 20Б1',
     description: 'Горячекатаная стальная балка. Прогибается мало, подходит для больших пролётов и заметных нагрузок.',
     image_url: publicAsset('steel1.jpg'),
-    video_url: publicAsset('steel1.mov'),
+    video_url: publicAsset('steel1.mp4'),
     load: 2,
     deflection: 2.5,
     like_count: 2,
