@@ -185,23 +185,25 @@ npm run build:pages
 npm run preview:pages
 ```
 
-Локальная копия Pages открывается на `http://localhost:4173/Beam-deflection-frontend/`. В этой сборке доступна только гостевая навигация, а запросы списка и ленты сразу используют mock. Роуты после `#` работают при прямом открытии и обновлении страницы на статическом хостинге. После установки Service Worker сохранённая сборка, изображения и видео доступны офлайн. В DevTools во вкладке Application проверь Manifest и дождись статуса Activated для Service Worker перед проверкой в авиарежиме.
+Локальная копия Pages открывается на `http://localhost:4173/Beam-deflection-frontend/`. В этой сборке доступна только гостевая навигация, а запросы списка и ленты сразу используют mock. `BrowserRouter` получает базовый путь репозитория, а `404.html` позволяет GitHub Pages открыть внутренний адрес при прямом переходе. `vite-plugin-pwa` создаёт манифест и Service Worker, который кэширует сборку, изображения и видео. В DevTools во вкладке Application проверь Manifest и дождись статуса Activated перед проверкой в авиарежиме.
 
-Для публикации выбери **Settings → Pages → Source → GitHub Actions**. Workflow `.github/workflows/pages.yml` собирает и публикует только ветку `lab7-pwa-https` при push. Если в окружении `github-pages` задан список разрешённых веток, добавь в него `lab7-pwa-https`. Адрес опубликованной сборки появляется в результате задания Deploy.
+Для публикации выполни `npm run deploy` из ветки `lab7-pwa-https`. Команда соберёт гостевую версию и отправит содержимое `dist` в ветку `gh-pages`. В **Settings → Pages** выбери **Deploy from a branch**, ветку `gh-pages` и каталог `/ (root)`.
 
 ### HTTPS на ноутбуке и телефоне
 
-Запусти Go-сервис на порту 8080 и его хранилища по инструкции бэкенда. Для уже настроенной базы в каталоге `backend` выполни `docker compose up -d postgres minio redis` и `go run ./cmd/rip`. Узнай IP ноутбука в Wi-Fi. Установи `mkcert`, затем выполни в каталоге фронтенда, указав текущий IP.
+Запусти Go-сервис на порту 8080 и его хранилища по инструкции бэкенда. Для уже настроенной базы в каталоге `backend` выполни `docker compose up -d postgres minio redis` и `go run ./cmd/rip`. Во фронтенде команда `npm run dev:https` подключает `vite-plugin-mkcert` и включает PWA в режиме разработки. При первом запуске плагин может запросить установку локального центра сертификации.
+
+Если сертификат для IP ноутбука выпущен вручную через `mkcert`, укажи его файлы явно. Подставь текущий IP ноутбука в Wi-Fi.
 
 ```bash
 LAN_IP=192.168.1.20
 mkdir -p .certs
 mkcert -install
 mkcert -cert-file .certs/lan.pem -key-file .certs/lan-key.pem localhost 127.0.0.1 "$LAN_IP"
-HTTPS_CERT_FILE=.certs/lan.pem HTTPS_KEY_FILE=.certs/lan-key.pem npm run dev
+HTTPS_CERT_FILE=.certs/lan.pem HTTPS_KEY_FILE=.certs/lan-key.pem npm run dev:https
 ```
 
-На телефоне в той же сети установи доверие к публичному сертификату `rootCA.pem` из каталога, который выводит `mkcert -CAROOT`. На iOS включи полное доверие к нему в настройках доверия сертификатам. Открой `https://<IP-ноутбука>:3000`. Браузер обращается к Vite по HTTPS, а Vite передаёт `/api` в Go и `/media` в MinIO. Приватный ключ сервера лежит в игнорируемой папке `.certs`. Приватный ключ центра сертификации остаётся на ноутбуке.
+На телефоне в той же сети установи доверие к публичному сертификату `rootCA.pem` из каталога плагина `.certs`. Для сертификата, выпущенного вручную, этот файл лежит в каталоге, который выводит `mkcert -CAROOT`. На iOS включи полное доверие к нему в настройках доверия сертификатам. Открой `https://<IP-ноутбука>:3000`. Vite принимает запросы по HTTPS и передаёт `/api` в Go, а `/media` в MinIO. Приватные ключи остаются на ноутбуке.
 
 ### Порядок показа
 

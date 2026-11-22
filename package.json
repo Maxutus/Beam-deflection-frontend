@@ -12,7 +12,11 @@
     "build:pages": "tsc -b && vite build --mode pages",
     "preview": "vite preview",
     "preview:pages": "vite preview --mode pages",
-    "generate-api": "node scripts/generate-api.mjs"
+    "generate-api": "node scripts/generate-api.mjs",
+    "dev:https": "vite --mode https",
+    "predeploy": "npm run build:pages",
+    "deploy": "gh-pages -d dist --nojekyll",
+    "postbuild:pages": "node -e 'require(\"node:fs\").copyFileSync(\"dist/index.html\", \"dist/404.html\")'"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
@@ -29,9 +33,12 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.2.0",
+    "gh-pages": "^6.3.0",
     "swagger-typescript-api": "^13.2.7",
     "typescript": "~5.9.3",
-    "vite": "^7.3.7"
+    "vite": "^7.3.7",
+    "vite-plugin-mkcert": "^2.1.0",
+    "vite-plugin-pwa": "^2.0.0"
   },
   "overrides": {
     "@restart/ui": {

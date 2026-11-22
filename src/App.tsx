@@ -1,4 +1,4 @@
-import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ROUTES } from './Routes'
 import { TabBar } from './components/TabBar'
 import TilesPage from './pages/TilesPage'
@@ -8,11 +8,9 @@ import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
 import { isPagesBuild } from './modules/deployment'
 
-const Router = isPagesBuild ? HashRouter : BrowserRouter
-
 function App() {
   return (
-    <Router>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <div className="phone">
         <main className="phone__content">
           <Routes>
@@ -27,7 +25,7 @@ function App() {
         </main>
         <TabBar />
       </div>
-    </Router>
+    </BrowserRouter>
   )
 }
 
