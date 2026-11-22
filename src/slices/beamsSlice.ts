@@ -3,6 +3,7 @@ import { api } from '../api'
 import { type Beam, getMockBeams, getMockFeedBeam, parseNumber, toBeam } from '../modules/beamsApi'
 import type { RootState } from '../store'
 import { resetUser, setUser } from './userSlice'
+import { isPagesBuild } from '../modules/deployment'
 
 interface LoadError {
   message: string
@@ -29,8 +30,13 @@ export const getBeamsList = createAsyncThunk<Beam[], void, { state: RootState; r
   'beams/getBeamsList',
   async (_, { getState, rejectWithValue }) => {
     const { beams, user } = getState()
+    const maxDeflection = parseNumber(beams.searchValue)
+    if (isPagesBuild) {
+      return getMockBeams(maxDeflection)
+    }
+
     try {
-      const response = await api.beams.beamsList({ max_deflection: parseNumber(beams.searchValue) })
+      const response = await api.beams.beamsList({ max_deflection: maxDeflection })
       return response.data.map(toBeam)
     } catch {
       return rejectWithValue({ message: 'Не удалось загрузить балки', guest: !user.isAuthenticated })
@@ -43,6 +49,10 @@ export const getFeedBeam = createAsyncThunk<
   { id?: number; next?: boolean },
   { state: RootState; rejectValue: LoadError }
 >('beams/getFeedBeam', async ({ id, next }, { getState, rejectWithValue }) => {
+  if (isPagesBuild) {
+    return getMockFeedBeam(id, next) ?? rejectWithValue({ message: 'Балка не найдена', guest: true })
+  }
+
   try {
     const response = await api.beams.feedList({ id, next })
     return toBeam(response.data)

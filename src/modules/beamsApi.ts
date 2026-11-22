@@ -1,5 +1,6 @@
 import type { DsBeamResponse } from '../api/Api'
 import { BEAMS_MOCK } from './mock'
+import { publicAsset } from './deployment'
 
 export interface Beam {
   id: number
@@ -17,8 +18,8 @@ export interface Beam {
   formed_at: string | null
 }
 
-export const DEFAULT_IMAGE = '/DefaultImage.png'
-export const DEFAULT_VIDEO = '/DefaultVideo.mp4'
+export const DEFAULT_IMAGE = publicAsset('DefaultImage.png')
+export const DEFAULT_VIDEO = publicAsset('DefaultVideo.mp4')
 
 export const formatNumber = (value: number): string => value.toLocaleString('ru-RU')
 

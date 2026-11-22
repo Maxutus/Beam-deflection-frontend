@@ -6,7 +6,8 @@
     --bs-navbar-active-color: var(--lm-dark);
     --bs-navbar-disabled-color: var(--lm-border);
     flex: none;
-    height: var(--tabbar-height);
+    height: calc(var(--tabbar-height) + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
     background: var(--lm-surface);
     border-top: 1px solid var(--lm-divider);
 }

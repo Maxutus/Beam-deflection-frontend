@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ROUTES } from './Routes'
 import { TabBar } from './components/TabBar'
 import TilesPage from './pages/TilesPage'
@@ -6,10 +6,13 @@ import FeedPage from './pages/FeedPage'
 import DraftPage from './pages/DraftPage'
 import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
+import { isPagesBuild } from './modules/deployment'
+
+const Router = isPagesBuild ? HashRouter : BrowserRouter
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <div className="phone">
         <main className="phone__content">
           <Routes>
@@ -17,14 +20,14 @@ function App() {
             <Route path={ROUTES.TILES} element={<TilesPage />} />
             <Route path={ROUTES.FEED} element={<FeedPage />} />
             <Route path={`${ROUTES.FEED}/:id`} element={<FeedPage />} />
-            <Route path={ROUTES.DRAFT} element={<DraftPage />} />
-            <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+            {!isPagesBuild && <Route path={ROUTES.DRAFT} element={<DraftPage />} />}
+            {!isPagesBuild && <Route path={ROUTES.LOGIN} element={<LoginPage />} />}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
         <TabBar />
       </div>
-    </BrowserRouter>
+    </Router>
   )
 }
 

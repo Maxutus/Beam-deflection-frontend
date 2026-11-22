@@ -17,7 +17,7 @@
 .tile__thumb {
     position: relative;
     flex: none;
-    height: 150px;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     background: var(--lm-panel);
 }
@@ -25,7 +25,7 @@
 .tile .tile__image {
     width: 100%;
     height: 100%;
-    object-fit: fill;
+    object-fit: cover;
     border-radius: 0;
 }
 

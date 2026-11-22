@@ -9,6 +9,7 @@ import { api } from '../api'
 import type { AppDispatch, RootState } from '../store'
 import { resetUser } from '../slices/userSlice'
 import { getBeamsList, setSearchValue } from '../slices/beamsSlice'
+import { isPagesBuild } from '../modules/deployment'
 
 export const TabBar: FC = () => {
   const navigate = useNavigate()
@@ -47,7 +48,7 @@ export const TabBar: FC = () => {
           as="button"
           className="tabbar__item"
           active={isDraft}
-          disabled={!isAuthenticated}
+          disabled={isPagesBuild || !isAuthenticated}
           onClick={() => navigate(ROUTES.DRAFT)}
         >
           <svg className="tabbar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -69,6 +70,7 @@ export const TabBar: FC = () => {
           as="button"
           className="tabbar__item"
           active={isLogin}
+          disabled={isPagesBuild}
           onClick={isAuthenticated ? handleLogout : () => navigate(ROUTES.LOGIN)}
         >
           <svg className="tabbar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -28,3 +28,10 @@
     height: var(--control-height);
     padding: 0 24px;
 }
+
+@media (min-width: 680px) {
+    .inputField {
+        max-width: 480px;
+        padding-inline: 24px;
+    }
+}

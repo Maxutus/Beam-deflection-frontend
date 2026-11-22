@@ -1,12 +1,13 @@
 import type { Beam } from './beamsApi'
+import { publicAsset } from './deployment'
 
 export const BEAMS_MOCK: Beam[] = [
   {
     id: 1,
     name: 'Двутавр 20Б1',
     description: 'Горячекатаная стальная балка. Прогибается мало, подходит для больших пролётов и заметных нагрузок.',
-    image_url: '/steel1.jpg',
-    video_url: '/steel1.mov',
+    image_url: publicAsset('steel1.jpg'),
+    video_url: publicAsset('steel1.mov'),
     load: 2,
     deflection: 2.5,
     like_count: 2,
@@ -20,8 +21,8 @@ export const BEAMS_MOCK: Beam[] = [
     id: 2,
     name: 'Брус клеёный',
     description: 'Клеёная балка из хвойных ламелей. Держит форму лучше цельного бруса, но заметно прогибается на длинных пролётах.',
-    image_url: '/wood1.jpg',
-    video_url: '/wood1.mp4',
+    image_url: publicAsset('wood1.jpg'),
+    video_url: publicAsset('wood1.mp4'),
     load: 2,
     deflection: 10,
     like_count: 1,
@@ -35,7 +36,7 @@ export const BEAMS_MOCK: Beam[] = [
     id: 3,
     name: 'Брус строганый',
     description: 'Цельный строганый брус небольшого сечения. Применяется в лёгких конструкциях и обрешётке.',
-    image_url: '/wood2.jpg',
+    image_url: publicAsset('wood2.jpg'),
     video_url: '',
     load: 2,
     deflection: 19,
@@ -50,8 +51,8 @@ export const BEAMS_MOCK: Beam[] = [
     id: 4,
     name: 'Ригель РДП 4.56',
     description: 'Железобетонный ригель заводского изготовления. Высокая жёсткость, прогиб на порядок меньше деревянных балок.',
-    image_url: '/ferroconcrete1.jpg',
-    video_url: '/ferroconcrete1.mp4',
+    image_url: publicAsset('ferroconcrete1.jpg'),
+    video_url: publicAsset('ferroconcrete1.mp4'),
     load: 2,
     deflection: 1.1,
     like_count: 1,
