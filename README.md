@@ -153,7 +153,6 @@ src/
     FeedPage.tsx        лента
     DraftPage.tsx       добавление
     LoginPage.tsx       вход
-    NotFoundPage.tsx    404
 ```
 
 ## Запуск

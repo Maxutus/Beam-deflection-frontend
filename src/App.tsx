@@ -5,7 +5,6 @@ import TilesPage from './pages/TilesPage'
 import FeedPage from './pages/FeedPage'
 import DraftPage from './pages/DraftPage'
 import LoginPage from './pages/LoginPage'
-import NotFoundPage from './pages/NotFoundPage'
 
 function App() {
   return (
@@ -13,13 +12,12 @@ function App() {
       <div className="phone">
         <main className="phone__content">
           <Routes>
-            <Route path="/" element={<Navigate to={ROUTES.FEED} replace />} />
             <Route path={ROUTES.TILES} element={<TilesPage />} />
             <Route path={ROUTES.FEED} element={<FeedPage />} />
             <Route path={`${ROUTES.FEED}/:id`} element={<FeedPage />} />
             <Route path={ROUTES.DRAFT} element={<DraftPage />} />
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-            <Route path="*" element={<NotFoundPage />} />
+            <Route path="*" element={<Navigate to={ROUTES.FEED} replace />} />
           </Routes>
         </main>
         <TabBar />
