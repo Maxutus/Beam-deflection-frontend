@@ -5,7 +5,7 @@ import mkcert from 'vite-plugin-mkcert'
 import { VitePWA } from 'vite-plugin-pwa'
 
 const API_TARGET = process.env.API_TARGET ?? 'http://localhost:8080'
-const MINIO_TARGET = process.env.MINIO_TARGET ?? 'http://localhost:9000'
+const MINIO_TARGET = process.env.MINIO_TARGET ?? 'http://localhost:9100'
 
 export default defineConfig(({ command, mode, isPreview }) => {
   const isPages = mode === 'pages'

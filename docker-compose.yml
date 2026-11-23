@@ -11,5 +11,5 @@ services:
       - 3000:3000
     environment:
       - API_TARGET=http://host.docker.internal:8080
-      - MINIO_TARGET=http://host.docker.internal:9000
+      - MINIO_TARGET=http://host.docker.internal:9100
     command: npm run dev
