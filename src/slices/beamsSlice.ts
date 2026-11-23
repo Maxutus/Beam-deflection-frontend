@@ -40,7 +40,7 @@ const initialState: BeamsState = {
   error: null,
 }
 
-const beamsPerPage = 5
+const beamsPerPage = 10
 
 interface BeamPage {
   data: Beam[]
