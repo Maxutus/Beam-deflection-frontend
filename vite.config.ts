@@ -49,7 +49,7 @@ export default defineConfig(({ command, mode, isPreview }) => {
     server: {
       https: keyFile && certFile ? { key: readFileSync(keyFile), cert: readFileSync(certFile) } : undefined,
       proxy: {
-        '/api': { target: API_TARGET, changeOrigin: true },
+        '/api': { target: API_TARGET, changeOrigin: true, xfwd: true },
         '/media': { target: MINIO_TARGET, changeOrigin: true },
       },
       watch: { usePolling: true },

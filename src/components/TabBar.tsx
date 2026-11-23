@@ -8,7 +8,7 @@ import { LOGOUT_LABEL, ROUTES, ROUTE_LABELS } from '../Routes'
 import { api } from '../api'
 import type { AppDispatch, RootState } from '../store'
 import { resetUser } from '../slices/userSlice'
-import { getBeamsList, setSearchValue } from '../slices/beamsSlice'
+import { getBeamsList } from '../slices/beamsSlice'
 import { isPagesBuild } from '../modules/deployment'
 
 export const TabBar: FC = () => {
@@ -30,7 +30,6 @@ export const TabBar: FC = () => {
     localStorage.removeItem('token')
     api.setSecurityData(null)
     dispatch(resetUser())
-    dispatch(setSearchValue(''))
     navigate(ROUTES.TILES)
     dispatch(getBeamsList())
   }

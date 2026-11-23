@@ -6,6 +6,12 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 import App from './App.tsx'
 import { store } from './store'
+import { startBeamFeedSession } from './api'
+import { isPagesBuild } from './modules/deployment'
+
+if (!isPagesBuild) {
+  void startBeamFeedSession().catch(() => undefined)
+}
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { api } from '../api'
+import { api, startBeamFeedSession } from '../api'
 import { type Beam, getMockBeams, getMockFeedBeam, parseNumber, toBeam } from '../modules/beamsApi'
 import type { RootState } from '../store'
 import { resetUser, setUser } from './userSlice'
@@ -12,7 +12,14 @@ interface LoadError {
 
 interface BeamsState {
   searchValue: string
+  appliedSearchValue: string
   beams: Beam[]
+  currentPage: number
+  totalPages: number
+  total: number
+  listLoading: boolean
+  listError: string | null
+  listRequestId: string | null
   feedBeam: Beam | null
   loading: boolean
   error: string | null
@@ -20,26 +27,54 @@ interface BeamsState {
 
 const initialState: BeamsState = {
   searchValue: '',
+  appliedSearchValue: '',
   beams: [],
+  currentPage: 1,
+  totalPages: 0,
+  total: 0,
+  listLoading: false,
+  listError: null,
+  listRequestId: null,
   feedBeam: null,
   loading: false,
   error: null,
 }
 
-export const getBeamsList = createAsyncThunk<Beam[], void, { state: RootState; rejectValue: LoadError }>(
+const beamsPerPage = 10
+
+interface BeamPage {
+  data: Beam[]
+  page: number
+  total: number
+}
+
+function getMockBeamPage(maxDeflection: number | undefined, page: number): BeamPage {
+  const beams = getMockBeams(maxDeflection)
+  const offset = (page - 1) * beamsPerPage
+  return { data: beams.slice(offset, offset + beamsPerPage), total: beams.length, page }
+}
+
+export const getBeamsList = createAsyncThunk<BeamPage, void, { state: RootState; rejectValue: string }>(
   'beams/getBeamsList',
   async (_, { getState, rejectWithValue }) => {
     const { beams, user } = getState()
-    const maxDeflection = parseNumber(beams.searchValue)
+    const maxDeflection = parseNumber(beams.appliedSearchValue)
     if (isPagesBuild) {
-      return getMockBeams(maxDeflection)
+      return getMockBeamPage(maxDeflection, beams.currentPage)
     }
 
     try {
-      const response = await api.beams.beamsList({ max_deflection: maxDeflection })
-      return response.data.map(toBeam)
+      const response = await api.beams.beamsList({
+        max_deflection: maxDeflection,
+        page: beams.currentPage,
+        limit: beamsPerPage,
+      })
+      const { data = [], page = beams.currentPage, total = 0 } = response.data
+      return { data: data.map(toBeam), page, total }
     } catch {
-      return rejectWithValue({ message: 'Не удалось загрузить балки', guest: !user.isAuthenticated })
+      return user.isAuthenticated
+        ? rejectWithValue('Не удалось загрузить балки')
+        : getMockBeamPage(maxDeflection, 1)
     }
   },
 )
@@ -54,6 +89,9 @@ export const getFeedBeam = createAsyncThunk<
   }
 
   try {
+    if (id === undefined || next) {
+      await startBeamFeedSession()
+    }
     const response = await api.beams.feedList({ id, next })
     return toBeam(response.data)
   } catch {
@@ -92,25 +130,36 @@ const beamsSlice = createSlice({
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload
     },
+    applySearchValue(state) {
+      state.appliedSearchValue = state.searchValue
+      state.currentPage = 1
+    },
+    setCurrentPage(state, action: PayloadAction<number>) {
+      state.currentPage = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getBeamsList.pending, (state) => {
-        state.loading = true
-        state.error = null
+      .addCase(getBeamsList.pending, (state, action) => {
+        state.listRequestId = action.meta.requestId
+        state.listLoading = true
+        state.listError = null
       })
       .addCase(getBeamsList.fulfilled, (state, action) => {
-        state.loading = false
-        state.beams = action.payload
+        if (state.listRequestId !== action.meta.requestId) return
+        state.listLoading = false
+        state.beams = action.payload.data
+        state.total = action.payload.total
+        state.totalPages = Math.ceil(state.total / beamsPerPage)
+        state.currentPage = action.payload.page
       })
       .addCase(getBeamsList.rejected, (state, action) => {
-        state.loading = false
-        if (action.payload?.guest) {
-          state.beams = getMockBeams(parseNumber(state.searchValue))
-          return
-        }
+        if (state.listRequestId !== action.meta.requestId) return
+        state.listLoading = false
         state.beams = []
-        state.error = action.payload?.message ?? null
+        state.total = 0
+        state.totalPages = 0
+        state.listError = action.payload ?? null
       })
       .addCase(getFeedBeam.pending, (state) => {
         state.loading = true
@@ -143,24 +192,30 @@ const beamsSlice = createSlice({
         state.error = action.payload ?? null
       })
       .addCase(deleteBeam.pending, (state) => {
-        state.loading = true
+        state.listLoading = true
+        state.listError = null
       })
       .addCase(deleteBeam.fulfilled, (state, action) => {
-        state.loading = false
+        state.listLoading = false
         state.beams = state.beams.filter((beam) => beam.id !== action.payload)
+        if (state.beams.length === 0 && state.currentPage > 1) state.currentPage--
       })
       .addCase(deleteBeam.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload ?? null
+        state.listLoading = false
+        state.listError = action.payload ?? null
       })
       .addCase(setUser, (state) => {
         state.feedBeam = null
       })
       .addCase(resetUser, (state) => {
         state.feedBeam = null
+        state.searchValue = ''
+        state.appliedSearchValue = ''
+        state.currentPage = 1
+        state.listRequestId = null
       })
   },
 })
 
-export const { setSearchValue } = beamsSlice.actions
+export const { applySearchValue, setCurrentPage, setSearchValue } = beamsSlice.actions
 export default beamsSlice.reducer

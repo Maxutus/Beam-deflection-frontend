@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import type { AppDispatch } from '../store'
-import { getBeamsList, setSearchValue } from '../slices/beamsSlice'
+import { applySearchValue, getBeamsList, setSearchValue } from '../slices/beamsSlice'
 
 interface Props {
   value: string
@@ -18,6 +18,7 @@ export const InputField: FC<Props> = ({ value, loading }) => {
       className="inputField"
       onSubmit={(event) => {
         event.preventDefault()
+        dispatch(applySearchValue())
         dispatch(getBeamsList())
       }}
     >

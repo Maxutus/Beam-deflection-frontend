@@ -10,6 +10,13 @@
  * ---------------------------------------------------------------
  */
 
+export interface DsBeamPageResponse {
+  data?: DsBeamResponse[];
+  limit?: number;
+  page?: number;
+  total?: number;
+}
+
 export interface DsBeamResponse {
   created_at?: string;
   creator?: string;
@@ -255,10 +262,23 @@ export class Api<
       query?: {
         /** Максимальный прогиб, мм */
         max_deflection?: number;
+        /**
+         * Номер страницы
+         * @min 1
+         * @default 1
+         */
+        page?: number;
+        /**
+         * Балок на странице
+         * @min 1
+         * @max 100
+         * @default 10
+         */
+        limit?: number;
       },
       params: RequestParams = {},
     ) =>
-      this.request<DsBeamResponse[], void>({
+      this.request<DsBeamPageResponse, void>({
         path: `/beams`,
         method: "GET",
         query: query,
@@ -345,19 +365,19 @@ export class Api<
       }),
 
     /**
-     * @description Одна опубликованная балка: без параметров – первая, id – эта балка, id и next=true – следующая после неё. Признак is_liked – 1, если текущий пользователь лайкнул балку
+     * @description Без параметров возвращается первая доступная балка сессии. id открывает карточку, id и next=true переходят к следующей позиции в Redis.
      *
      * @tags Балки
      * @name FeedList
-     * @summary Лента
+     * @summary Случайная лента опубликованных балок
      * @request GET:/beams/feed
      * @secure
      */
     feedList: (
       query?: {
-        /** id балки */
+        /** ID балки */
         id?: number;
-        /** Следующая после id */
+        /** Следующая карточка ленты */
         next?: boolean;
       },
       params: RequestParams = {},
@@ -368,6 +388,21 @@ export class Api<
         query: query,
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Балки
+     * @name FeedSessionCreate
+     * @summary Подготовить случайную ленту для сессии браузера
+     * @request POST:/beams/feed/session
+     */
+    feedSessionCreate: (params: RequestParams = {}) =>
+      this.request<void, void>({
+        path: `/beams/feed/session`,
+        method: "POST",
         ...params,
       }),
 
