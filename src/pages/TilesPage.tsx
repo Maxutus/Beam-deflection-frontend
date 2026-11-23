@@ -49,18 +49,6 @@ const TilesPage: FC = () => {
 
       {listError && <Alert variant="danger" className="tiles__error">{listError}</Alert>}
 
-      {totalPages > 1 && (
-        <nav className="tiles__pagination" aria-label="Страницы балок">
-          <Pagination size="sm" className="mb-0">
-            <Pagination.First aria-label="Первая страница" disabled={listLoading || isFirstPage} onClick={() => changePage(1)} />
-            <Pagination.Prev aria-label="Предыдущая страница" disabled={listLoading || isFirstPage} onClick={() => changePage(currentPage - 1)} />
-            <Pagination.Item active activeLabel="(текущая страница)">{currentPage} / {totalPages}</Pagination.Item>
-            <Pagination.Next aria-label="Следующая страница" disabled={listLoading || isLastPage} onClick={() => changePage(currentPage + 1)} />
-            <Pagination.Last aria-label="Последняя страница" disabled={listLoading || isLastPage} onClick={() => changePage(totalPages)} />
-          </Pagination>
-        </nav>
-      )}
-
       {beams.length === 0 && !listLoading && !listError && (
         <div className="message">
           <h2 className="message__title">Балок не найдено</h2>
@@ -78,6 +66,18 @@ const TilesPage: FC = () => {
             />
           ))}
         </section>
+      )}
+
+      {totalPages > 1 && (
+        <nav className="tiles__pagination" aria-label="Страницы балок">
+          <Pagination size="sm" className="mb-0">
+            <Pagination.First aria-label="Первая страница" disabled={listLoading || isFirstPage} onClick={() => changePage(1)} />
+            <Pagination.Prev aria-label="Предыдущая страница" disabled={listLoading || isFirstPage} onClick={() => changePage(currentPage - 1)} />
+            <Pagination.Item active activeLabel="(текущая страница)">{currentPage} / {totalPages}</Pagination.Item>
+            <Pagination.Next aria-label="Следующая страница" disabled={listLoading || isLastPage} onClick={() => changePage(currentPage + 1)} />
+            <Pagination.Last aria-label="Последняя страница" disabled={listLoading || isLastPage} onClick={() => changePage(totalPages)} />
+          </Pagination>
+        </nav>
       )}
 
       {listLoading && <Loader />}
