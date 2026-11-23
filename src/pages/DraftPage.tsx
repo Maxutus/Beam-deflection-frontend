@@ -23,6 +23,7 @@ const DraftPage: FC = () => {
   const [videoFile, setVideoFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState(DEFAULT_IMAGE)
   const [videoPreview, setVideoPreview] = useState(DEFAULT_VIDEO)
+  const isVideoPlaceholder = videoPreview === DEFAULT_VIDEO
 
   useEffect(() => {
     document.title = 'Добавление балки'
@@ -95,22 +96,28 @@ const DraftPage: FC = () => {
       {error && <Alert variant="danger" className="draft__error">{error}</Alert>}
 
       <Form className="draft" onSubmit={draft ? handlePublish : handleCreate}>
-        <div className="draft__row">
-          <Form.Group className="draft__field" controlId="draftImage">
-            <Form.Label className="draft__label">Изображение</Form.Label>
-            <label className="draft__media" htmlFor="draftImage">
-              <img className="draft__preview" src={imagePreview} alt="Фото балки" />
-            </label>
-            <Form.Control hidden type="file" accept="image/*" disabled={!!draft} onChange={handleImage} />
-          </Form.Group>
-          <Form.Group className="draft__field" controlId="draftVideo">
-            <Form.Label className="draft__label">Видео</Form.Label>
-            <label className="draft__media" htmlFor="draftVideo">
-              <video key={videoPreview} className="draft__preview" src={videoPreview} autoPlay muted loop playsInline />
-            </label>
-            <Form.Control hidden type="file" accept="video/*" disabled={!!draft} onChange={handleVideo} />
-          </Form.Group>
-        </div>
+        <Form.Group className="draft__field" controlId="draftImage">
+          <Form.Label className="draft__label">Изображение</Form.Label>
+          <label className="draft__media" htmlFor="draftImage">
+            <img className="draft__preview" src={imagePreview} alt="Фото балки" />
+          </label>
+          <Form.Control hidden type="file" accept="image/*" disabled={!!draft} onChange={handleImage} />
+        </Form.Group>
+        <Form.Group className="draft__field" controlId="draftVideo">
+          <Form.Label className="draft__label">Видео</Form.Label>
+          <label className="draft__media draft__media--video" htmlFor="draftVideo">
+            <video
+              key={videoPreview}
+              className={isVideoPlaceholder ? 'draft__preview draft__preview--video-placeholder' : 'draft__preview'}
+              src={videoPreview}
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
+          </label>
+          <Form.Control hidden type="file" accept="video/*" disabled={!!draft} onChange={handleVideo} />
+        </Form.Group>
 
         <Form.Group className="draft__field" controlId="draftName">
           <Form.Label className="draft__label">Название</Form.Label>

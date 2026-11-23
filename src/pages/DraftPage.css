@@ -30,12 +30,17 @@
 }
 
 .draft__media {
-    aspect-ratio: 16 / 9;
+    height: 160px;
     border: 1px solid var(--lm-border);
     border-radius: var(--tile-radius);
-    background: var(--lm-surface);
+    background: var(--lm-background);
     overflow: hidden;
     cursor: pointer;
+}
+
+.draft__media--video {
+    /* Match the background of the bundled placeholder video. */
+    background: #3c484c;
 }
 
 .draft__preview {
@@ -43,6 +48,12 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+.draft__preview--video-placeholder {
+    width: min(192px, 100%);
+    margin-inline: auto;
+    object-fit: cover;
 }
 
 .draft .draft__input {
